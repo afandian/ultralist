@@ -8,6 +8,24 @@ import (
 	"os/user"
 )
 
+// Return home directory.
+func GetHome() (home string) {
+	usr, err := user.Current()
+	// Android Go doesn't implement this.
+	if err != nil {
+		home = usr.HomeDir
+	} else {
+		home = os.Getenv("HOME")
+
+		if len(home) == 0 {
+			fmt.Println("Can't get home directory!")
+			os.Exit(1)
+		}
+	}
+
+	return
+}
+
 // FileStore is the main struct of this file.
 type FileStore struct {
 	FileLocation string
@@ -82,8 +100,7 @@ func (f *FileStore) GetLocation() string {
 	dir, _ := os.Getwd()
 	localrepo := fmt.Sprintf("%s/.todos.json", dir)
 
-	usr, _ := user.Current()
-	homerepo := fmt.Sprintf("%s/.todos.json", usr.HomeDir)
+	homerepo := fmt.Sprintf("%s/.todos.json", GetHome())
 
 	_, ferr := os.Stat(localrepo)
 	if ferr == nil {

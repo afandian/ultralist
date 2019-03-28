@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"os/user"
 	"strings"
 	"time"
 )
@@ -124,8 +123,7 @@ func (b *Backend) apiURL(path string) string {
 }
 
 func (b *Backend) credsFolderPath() string {
-	usr, _ := user.Current()
-	return fmt.Sprintf("%s/.config/ultralist/", usr.HomeDir)
+	return fmt.Sprintf("%s/.config/ultralist/", GetHome())
 }
 
 func (b *Backend) credsFilePath() string {
